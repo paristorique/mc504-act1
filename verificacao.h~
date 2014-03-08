@@ -1,0 +1,3 @@
+void* verificar_linha(void *v);
+int verificar();
+int main();
