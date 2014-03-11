@@ -40,7 +40,7 @@ for(i=0;i<9;i++){
 		ja[j]=1;
 	}else{
 	printf("A Columna %d contém duas ocorerencias do numero %d\n",numCol+1,j);
-toReturn[0]=2;
+toReturn[0]=3;
 toReturn[1]=numCol+1;
 toReturn[2]=j;
 pthread_exit((void*) *toReturn);
@@ -136,13 +136,6 @@ usleep(1000);
   for (i = 0; i < 9; i++) {
     pthread_join(thr[i], (void **) retorno);
 
- /* if (*retorno == 0){
-      printf("Thread encerrou normalmente.\n");}
-  else{
-    //  printf("Thread encerrou com valor: %d\n", retorno[0]);
-printf("A linha %d contém duas ocorerencias do numero %d",retorno[1],retorno[2]);
-}*/
-
 } 
 
   for (i = 0; i < 9; i++) {
@@ -155,11 +148,16 @@ usleep(1000);
     pthread_join(thr[i+9], (void **) retorno);
 }
 
-columna.numCol=2;
-verificarColumna((void*) &columna);
+  for (i = 0; i < 9; i++) {
+  columna.numCol=i;
+    pthread_create(&thr[i+18], NULL, verificarColumna, (void*) &columna);
+usleep(1000);
+  }
 
-/*quadro.numQuadro=0;
-verificarQuadro((void*) &quadro);*/
+  for (i = 0; i < 9; i++) {
+    pthread_join(thr[i+18], (void **) retorno);
+}
+
 
 
     return 0;
