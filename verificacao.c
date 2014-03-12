@@ -40,9 +40,11 @@ for(i=0;i<9;i++){
 	ja[i]=0;}
 for(i=0;i<9;i++){
 	j= *(numcolumna+i*9);
+	//o j ainda nao foi encontrado, entao atualizamos o vetor dos ja
 	if(ja[j]==0){
 		ja[j]=1;
 	}else{
+	//senao, e que tem uma problema
 	printf("A Columna %d contém duas ocorerencias do numero %d\n",numCol+1,j);
 toReturn[0]=3;
 toReturn[1]=numCol+1;

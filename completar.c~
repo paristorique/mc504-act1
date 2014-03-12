@@ -23,11 +23,24 @@ struct Columna {
 };
 */
 
+//estrutura mandada nos thread para atualizar as linhas, as columnas e os quadrinhos
+typedef struct KaseOfSudoku KaseOfSudoku;
+
 //formato de cada quadrazinho do sudoku, com o numero de escolhas e as escolhas
 typedef struct Kase Kase;
+
+
 struct Kase {
 	int numChoices;
 	int* choices;
+};
+
+
+
+struct KaseOfSudoku{
+	Kase* sudoku;
+	int i; //posição
+	int j; //numero coloquado na posição i
 };
 
 Kase searchAndUpdate(Kase kase, int j){
@@ -47,7 +60,12 @@ int l;
 return kase;
 }
 
-void updateRow(Kase* sudoku,int i,int j){
+//void updateRow(Kase* sudoku,int i,int j){
+void updateRow(void* v){
+struct KaseOfSudoku* kos=v;
+Kase* sudoku=(*kos).sudoku;
+int i = (*kos).i;
+int j= (*kos).j;
 int l = (i/9)*9;
 int k;
 	for(k=l;k<l+9;k++){
@@ -59,7 +77,12 @@ int k;
 }
 
 
-void updateColumn(Kase* sudoku,int i, int j){
+//void updateColumn(Kase* sudoku,int i, int j){
+void updateColumn(void* v){
+struct KaseOfSudoku* kos=v;
+Kase* sudoku=(*kos).sudoku;
+int i = (*kos).i;
+int j= (*kos).j;
 int l = i%9;
 int k=l;
 	while(k<81){
@@ -71,10 +94,15 @@ int k=l;
 }
 
 
-void updateSquare(Kase* sudoku,int i,int j){
+//void updateSquare(Kase* sudoku,int i,int j){
+void updateSquare(void* v){
+struct KaseOfSudoku* kos=v;
+Kase* sudoku=(*kos).sudoku;
+int i = (*kos).i;
+int j= (*kos).j;
 int l = (((i/9)/3)*3)*9+i%9;
 int k=l;
-	while(k<81){
+	while(k<l+21){
 		if(k!=i){
 		sudoku[k]=searchAndUpdate(sudoku[k],j);}
 	k++;
@@ -100,6 +128,7 @@ return j;
 int completar(){
 int i,j;
 char** sudokuWritten = malloc(6561*sizeof(char*));
+pthread_t thr[243]; //3 x 81 threads
 struct Kase* sudoku = malloc(81*sizeof(Kase));
 for(i=0;i<81;i++){
 *(sudokuWritten+i*sizeof(char*))=malloc(81*sizeof(char));
@@ -128,15 +157,25 @@ struct Kase* kase = malloc(sizeof(Kase));
 (*kase).numChoices=j;
 sudoku[i]=*kase;
 }
-
+KaseOfSudoku kos;
+kos.sudoku=sudoku;
 while(checkIfNotCompleted(sudoku)){
 	for(i=0;i<81;i++){
 		if(sudoku[i].numChoices==1){
 			j=sudoku[i].choices[0];
 			sudoku[i].numChoices=0;
-			updateRow(sudoku,i,j);
-			updateColumn(sudoku,i,j);
-			updateSquare(sudoku,i,j);
+	kos.i=i;
+	kos.j=j;
+ 	pthread_create(&thr[i], NULL, updateRow, (void*) &kos);usleep(1000);
+ 	pthread_create(&thr[i+81], NULL, updateColumn, (void*) &kos);usleep(1000);
+ 	pthread_create(&thr[i+162], NULL, updateSquare, (void*) &kos);usleep(1000);
+	pthread_join(thr[i], NULL);
+	pthread_join(thr[i+81], NULL);
+	pthread_join(thr[i+162], NULL);
+
+	//		updateRow(sudoku,i,j);
+	//		updateColumn(sudoku,i,j);
+	//		updateSquare(sudoku,i,j);
 		}
 	}
 

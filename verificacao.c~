@@ -4,24 +4,28 @@
 #include <unistd.h>
 #include "verificacao.h"
 
+//estrutura dum quadro de um sudoku (têm 9)
 typedef struct Quadro Quadro;
 struct Quadro {
 	int numQuadro;
 	int* sudoku;
 };
 
+//estrutura de uma linha de um sudoku
 typedef struct Linha Linha;
 struct Linha {
 	int numLine;
 	int* sudoku;
 };
 
+//estrutura de uma columna
 typedef struct Columna Columna;
 struct Columna {
 	int numCol;
 	int* sudoku;
 };
 
+//funçao ligada no thread para verificar a columna
 void* verificarColumna(void *v){
 struct Columna* columna=v;
 int* toReturn=malloc(3*sizeof(int));
@@ -29,7 +33,7 @@ int numCol = (*columna).numCol;
 int *sudoku = (*columna).sudoku;
 int *numcolumna;
 numcolumna = sudoku+numCol;
-short int *ja = malloc(9*sizeof(short int));
+short int *ja = malloc(9*sizeof(short int)); //array que corresponde se já encontramos o numero considerado (de 1 a 9) na columna. ja[x]=0 significa que x (de 1 a 9)ainda nao foi encontrado, ja[x] significa o contrario
 int i;
 int j;
 for(i=0;i<9;i++){
@@ -51,7 +55,7 @@ return (void*) 0;
 }
 
 
-
+//função de verificaçao de uma linha, ligada no thread
 void* verificarLinha(void *v){
 struct Linha* linha=v;
 int* toReturn=malloc(3*sizeof(int));
@@ -59,7 +63,7 @@ int numLine = (*linha).numLine;
 int *sudoku = (*linha).sudoku;
 int *numlinha;
 numlinha = sudoku+numLine*9;
-short int *ja = malloc(9*sizeof(short int));
+short int *ja = malloc(9*sizeof(short int)); //idem que para as columnas
 int i;
 int j;
 for(i=0;i<9;i++){
@@ -81,6 +85,7 @@ return (void*) 0;
 }
 
 
+//função de verificação de um quadrinho, ligada no thread
 void* verificarQuadro(void *v){
 struct Quadro* quadro=v;
 int* toReturn=malloc(3*sizeof(int));
@@ -88,7 +93,7 @@ int numQuadro = (*quadro).numQuadro;
 int *sudoku = (*quadro).sudoku;
 int *numQuadrinho;
 numQuadrinho = sudoku+(numQuadro%3)*3+(numQuadro/3)*27;
-short int *ja = malloc(9*sizeof(short int));
+short int *ja = malloc(9*sizeof(short int)); //idem columna
 int i;
 int j;
 for(i=0;i<9;i++){
@@ -109,6 +114,7 @@ pthread_exit((void*) *toReturn);
 return (void*) 0;
 }
 
+//funcao principal de verificação
 int verificar(){
 int *retorno=malloc(3*sizeof(int));
 pthread_t thr[27];
@@ -125,7 +131,7 @@ linha.sudoku=sudoku;
 quadro.sudoku=sudoku;
 columna.sudoku=sudoku;
 
-  
+  //thread para cada linha
   for (i = 0; i < 9; i++) {
   linha.numLine=i;
     pthread_create(&thr[i], NULL, verificarLinha, (void*) &linha);
@@ -138,6 +144,7 @@ usleep(1000);
 
 } 
 
+//thread para cada quadrinho
   for (i = 0; i < 9; i++) {
   quadro.numQuadro=i;
     pthread_create(&thr[i+9], NULL, verificarQuadro, (void*) &quadro);
@@ -148,6 +155,7 @@ usleep(1000);
     pthread_join(thr[i+9], (void **) retorno);
 }
 
+//thread para cada columna
   for (i = 0; i < 9; i++) {
   columna.numCol=i;
     pthread_create(&thr[i+18], NULL, verificarColumna, (void*) &columna);
@@ -164,6 +172,7 @@ usleep(1000);
 
 }
 
+//funcao main
 int main(){
 verificar();
 
