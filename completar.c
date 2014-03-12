@@ -72,8 +72,16 @@ int k=l;
 
 
 void updateSquare(Kase* sudoku,int i,int j){
-
-//TODO
+int l = (((i/9)/3)*3)*9+i%9;
+int k=l;
+	while(k<l+21){
+		if(k!=i){
+		sudoku[k]=searchAndUpdate(sudoku[k],j);}
+	k++;
+	if(k%3==0){
+		k=k+6;
+		}
+	}
 }
 
 //funcao que verifica se um sudoku já foi compleado
@@ -133,8 +141,7 @@ while(checkIfNotCompleted(sudoku)){
 	}
 
 }
-
-
+printf("Resultado: \n %d %d %d %d %d %d %d %d %d \n %d %d %d %d %d %d %d %d %d \n %d %d %d %d %d %d %d %d %d \n %d %d %d %d %d %d %d %d %d \n %d %d %d %d %d %d %d %d %d \n %d %d %d %d %d %d %d %d %d \n %d %d %d %d %d %d %d %d %d \n %d %d %d %d %d %d %d %d %d \n %d %d %d %d %d %d %d %d %d \n ", sudoku[0].choices[0], sudoku[1].choices[0], sudoku[2].choices[0], sudoku[3].choices[0], sudoku[4].choices[0], sudoku[5].choices[0], sudoku[6].choices[0], sudoku[7].choices[0], sudoku[8].choices[0], sudoku[9].choices[0], sudoku[10].choices[0], sudoku[11].choices[0], sudoku[12].choices[0], sudoku[13].choices[0], sudoku[14].choices[0], sudoku[15].choices[0], sudoku[16].choices[0], sudoku[17].choices[0], sudoku[18].choices[0], sudoku[19].choices[0], sudoku[20].choices[0], sudoku[21].choices[0], sudoku[22].choices[0], sudoku[23].choices[0], sudoku[24].choices[0], sudoku[25].choices[0], sudoku[26].choices[0], sudoku[27].choices[0], sudoku[28].choices[0], sudoku[29].choices[0], sudoku[30].choices[0], sudoku[31].choices[0], sudoku[32].choices[0], sudoku[33].choices[0], sudoku[34].choices[0], sudoku[35].choices[0], sudoku[36].choices[0], sudoku[37].choices[0], sudoku[38].choices[0], sudoku[39].choices[0],sudoku[40].choices[0], sudoku[41].choices[0], sudoku[42].choices[0], sudoku[43].choices[0], sudoku[44].choices[0], sudoku[45].choices[0], sudoku[46].choices[0], sudoku[47].choices[0], sudoku[48].choices[0], sudoku[49].choices[0], sudoku[50].choices[0], sudoku[51].choices[0], sudoku[52].choices[0], sudoku[53].choices[0], sudoku[54].choices[0], sudoku[55].choices[0], sudoku[56].choices[0], sudoku[57].choices[0], sudoku[58].choices[0], sudoku[59].choices[0], sudoku[60].choices[0], sudoku[61].choices[0], sudoku[62].choices[0], sudoku[63].choices[0], sudoku[64].choices[0], sudoku[65].choices[0], sudoku[66].choices[0], sudoku[67].choices[0], sudoku[68].choices[0], sudoku[69].choices[0], sudoku[70].choices[0], sudoku[71].choices[0], sudoku[72].choices[0], sudoku[73].choices[0], sudoku[74].choices[0], sudoku[75].choices[0], sudoku[76].choices[0], sudoku[77].choices[0], sudoku[78].choices[0], sudoku[79].choices[0], sudoku[80].choices[0]);
 }
 
 int main(){
