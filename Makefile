@@ -1,3 +1,3 @@
-completar.o : completar.c
-	gcc -Wall -g -pthread completar.c -o completar
+dicas.o : dicas.c
+	gcc -Wall -g -pthread dicas.c -o dicas
 

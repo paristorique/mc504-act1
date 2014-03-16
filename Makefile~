@@ -1,5 +1,3 @@
-verificacao.o : verificacao.c
-	gcc -Wall -g -pthread verificacao.c -o verificacao
 completar.o : completar.c
 	gcc -Wall -g -pthread completar.c -o completar
 
