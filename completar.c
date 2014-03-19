@@ -85,7 +85,7 @@ struct KaseOfSudoku* kos=v;
 Kase* sudoku=(*kos).sudoku;
 int i = (*kos).i;
 int j= (*kos).j;
-int l = (((i/9)/3)*3)*9+i%9;
+int l = (((i/9)/3)*3)*9+((i%9)/3)*3;
 int k=l;
 //vamos atualizar (cf funcao searchAndUpdate) todos os elementos do quadrinho considerado
 	while(k<l+21){

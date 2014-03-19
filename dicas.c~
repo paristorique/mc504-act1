@@ -169,7 +169,7 @@ for(i=0;i<81;i++){
 
 //funcao main
 int main(){
-  return dica();
-
+  dica();
+  return 0;
 }
 
